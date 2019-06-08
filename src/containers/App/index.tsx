@@ -7,7 +7,7 @@ import "./index.scss";
 export class App extends React.Component<{}, {}> {
   public render() {
     return (
-      <div>
+      <div className="app">
         <Sidebar />
       </div>
     );

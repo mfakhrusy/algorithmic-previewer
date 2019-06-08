@@ -10,14 +10,35 @@ interface ISidebarItemProps {
   dropdownItems: IAlgorithmContentDropdownItem[];
 }
 
-export class SidebarItem extends React.Component<ISidebarItemProps, {}> {
+interface ISidebarItemState {
+  showDropdown: boolean;
+}
+
+export class SidebarItem extends React.Component<ISidebarItemProps, ISidebarItemState> {
+  constructor(props: ISidebarItemProps) {
+    super(props);
+
+    this.state = {
+      showDropdown: false,
+    };
+  }
+
   public render() {
     const { label, dropdownItems } = this.props;
+    const { showDropdown } = this.state;
+
     return (
-      <div className="sidebar-item">
-        {label}
+      <div
+        className="sidebar-item"
+      >
+        <div
+          className="sidebar-item__label"
+          onClick={this.expandDropdown}
+        >
+          {label}
+        </div>
         {dropdownItems.length !== 0 ? (
-          <div className="sidebar-item__dropdown">
+          <div className={`sidebar-item__dropdown ${showDropdown ? "is--shown" : "is--hidden"}`}>
             {dropdownItems.map((item) => (
               <SidebarDropdownItem key={item.name} label={item.label} />
             ))}
@@ -25,5 +46,14 @@ export class SidebarItem extends React.Component<ISidebarItemProps, {}> {
         ) : null}
       </div>
     );
+  }
+
+  private expandDropdown = () => {
+    const { dropdownItems } = this.props;
+    const { showDropdown } = this.state;
+
+    if (dropdownItems.length > 0) {
+      this.setState({ showDropdown: !showDropdown });
+    }
   }
 }
